@@ -9,7 +9,7 @@ import "hardhat/console.sol";
 
 // inhereit the contract we imported
 
-contract EpicNft is ERC721URIStorage {
+contract EpicNFT is ERC721URIStorage {
     // Counter for TokenIds
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -20,7 +20,7 @@ contract EpicNft is ERC721URIStorage {
     }
 
     // minting function
-    function mintEpicNft() public {
+    function mintEpicNFT() public {
         // Get current tokenId, starts from 0
         uint256 newTokenId = _tokenIds.current();
 
@@ -29,7 +29,10 @@ contract EpicNft is ERC721URIStorage {
 
         // Set NFTs data
 
-        _setTokenURI(newTokenId, "https://jsonkeeper.com/b/ZTEQ");
+        _setTokenURI(
+            newTokenId,
+            "https://gateway.pinata.cloud/ipfs/QmaaPZVp9YsFLFrRUirW4W7p8osxWb8GbrG38hgawdLYhA"
+        );
         console.log(
             "An NFT w/ ID %s has been minted to %s",
             newTokenId,
