@@ -3,6 +3,7 @@
 pragma solidity ^0.8.1;
 
 // Import OpenZeppelin Contracts.
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
@@ -14,15 +15,106 @@ contract EpicNFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    string baseSvg =
+        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='black' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+
+    // arrays of words for randomizer
+    string[] firstWords = [
+        "Purple",
+        "Yellow",
+        "Pink",
+        "PapayaWhip",
+        "Honeydew",
+        "Turquoise",
+        "Chartreuse"
+    ];
+    string[] secondWords = [
+        "Monkey",
+        "Starfish",
+        "Narwhal",
+        "Unicorn",
+        "Stork",
+        "Roadrunner",
+        "Elephant"
+    ];
+    string[] thirdWords = [
+        "SunKiss",
+        "Starkin",
+        "Munchkin",
+        "ButtMunch",
+        "TwinkleToes",
+        "BellyLaugher",
+        "Tingler",
+        "Sparkler"
+    ];
+
     // Pass the name of the NFTs token and symbol
     constructor() ERC721("StarNft", "STAR") {
         console.log("This is my NFT contract. WOOOT!!!");
+    }
+
+    function pickRandomFirstWord(uint256 tokenId)
+        public
+        view
+        returns (string memory)
+    {
+        // Seed random generator
+        uint256 rando = random(
+            string(abi.encodePacked("FIRST_WORD", Strings.toString(tokenId)))
+        );
+        rando = rando % firstWords.length;
+        return firstWords[rando];
+    }
+
+    function pickRandomSecondWord(uint256 tokenId)
+        public
+        view
+        returns (string memory)
+    {
+        // Seed random generator
+        uint256 rando = random(
+            string(
+                abi.encodePacked("   SECOND_WORD", Strings.toString(tokenId))
+            )
+        );
+        rando = rando % secondWords.length;
+        return secondWords[rando];
+    }
+
+    function pickRandomThirdWord(uint256 tokenId)
+        public
+        view
+        returns (string memory)
+    {
+        // Seed random generator
+        uint256 rando = random(
+            string(abi.encodePacked("   THIRD_WORD", Strings.toString(tokenId)))
+        );
+        rando = rando % thirdWords.length;
+        return thirdWords[rando];
+    }
+
+    function random(string memory input) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(input)));
     }
 
     // minting function
     function mintEpicNFT() public {
         // Get current tokenId, starts from 0
         uint256 newTokenId = _tokenIds.current();
+
+        // grab random words from each array
+        string memory first = pickRandomFirstWord(newTokenId);
+        string memory second = pickRandomSecondWord(newTokenId);
+        string memory third = pickRandomThirdWord(newTokenId);
+
+        //concat string and close <text> <svg> tags
+        string memory finalSvg = string(
+            abi.encodePacked(baseSvg, first, second, third, "</text></svg>")
+        );
+        console.log("\n--------------------");
+        console.log(finalSvg);
+        console.log("--------------------\n");
 
         //mint nft safely
         _safeMint(msg.sender, newTokenId);
