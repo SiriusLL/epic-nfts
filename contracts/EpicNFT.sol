@@ -8,6 +8,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
 
+// helper function for base64 conversion contract
+import {Base64} from "./libraries/Base64.sol";
+
 // inhereit the contract we imported
 
 contract EpicNFT is ERC721URIStorage {
@@ -26,7 +29,12 @@ contract EpicNFT is ERC721URIStorage {
         "PapayaWhip",
         "Honeydew",
         "Turquoise",
-        "Chartreuse"
+        "Chartreuse",
+        "Rainbow",
+        "Violet",
+        "Indigo",
+        "Tomato",
+        "Ash"
     ];
     string[] secondWords = [
         "Monkey",
@@ -35,7 +43,12 @@ contract EpicNFT is ERC721URIStorage {
         "Unicorn",
         "Stork",
         "Roadrunner",
-        "Elephant"
+        "Elephant",
+        "snuffleupagus",
+        "Sentient",
+        "WoodPecker",
+        "SeaDragon",
+        "possum"
     ];
     string[] thirdWords = [
         "SunKiss",
@@ -45,7 +58,10 @@ contract EpicNFT is ERC721URIStorage {
         "TwinkleToes",
         "BellyLaugher",
         "Tingler",
-        "Sparkler"
+        "Sparkler",
+        "Bumfuzzle",
+        "Everywhen",
+        "Cattywampus"
     ];
 
     // Pass the name of the NFTs token and symbol
@@ -107,11 +123,36 @@ contract EpicNFT is ERC721URIStorage {
         string memory first = pickRandomFirstWord(newTokenId);
         string memory second = pickRandomSecondWord(newTokenId);
         string memory third = pickRandomThirdWord(newTokenId);
+        string memory combinedWord = string(
+            abi.encodePacked(first, second, third)
+        );
 
         //concat string and close <text> <svg> tags
         string memory finalSvg = string(
-            abi.encodePacked(baseSvg, first, second, third, "</text></svg>")
+            abi.encodePacked(baseSvg, combinedWord, "</text></svg>")
         );
+
+        // Get JSON metadata in place and base64 encode it.
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "',
+                        // set title of NFT to generated word
+                        combinedWord,
+                        '", "description": "Wisdom of a Dragon to fill your Journey with light.", "image": "data:image/svg+xml;base64,',
+                        // add svg base url and append base64 encoded svg
+                        Base64.encode(bytes(finalSvg)),
+                        '"}'
+                    )
+                )
+            )
+        );
+
+        string memory finalTokenUri = string(
+            abi.encodePacked("data:application/json;base64,", json)
+        );
+
         console.log("\n--------------------");
         console.log(finalSvg);
         console.log("--------------------\n");
@@ -121,10 +162,7 @@ contract EpicNFT is ERC721URIStorage {
 
         // Set NFTs data
 
-        _setTokenURI(
-            newTokenId,
-            "data:application/json;base64,ewogICJuYW1lIjogIlB1cnBsZU1vbmtleVN1bktpc3MiLAogICJkZXNjcmlwdGlvbiI6ICJXaXNkb20gb2YgYSBEcmFnb24gdG8gZmlsbCB5b3VyIEpvdXJuZXkgd2l0aCBsaWdodC4iLAogICJpbWFnZSI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSEJ5WlhObGNuWmxRWE53WldOMFVtRjBhVzg5SW5oTmFXNVpUV2x1SUcxbFpYUWlJSFpwWlhkQ2IzZzlJakFnTUNBek5UQWdNelV3SWo0S0lDQWdJRHh6ZEhsc1pUNHVZbUZ6WlNCN0lHWnBiR3c2SUhkb2FYUmxPeUJtYjI1MExXWmhiV2xzZVRvZ2MyVnlhV1k3SUdadmJuUXRjMmw2WlRvZ01UUndlRHNnZlR3dmMzUjViR1UrQ2lBZ0lDQThjbVZqZENCM2FXUjBhRDBpTVRBd0pTSWdhR1ZwWjJoMFBTSXhNREFsSWlCbWFXeHNQU0ppYkdGamF5SWdMejRLSUNBZ0lEeDBaWGgwSUhnOUlqVXdKU0lnZVQwaU5UQWxJaUJqYkdGemN6MGlZbUZ6WlNJZ1pHOXRhVzVoYm5RdFltRnpaV3hwYm1VOUltMXBaR1JzWlNJZ2RHVjRkQzFoYm1Ob2IzSTlJbTFwWkdSc1pTSStVSFZ5Y0d4bFRXOXVhMlY1VTNWdVMybHpjend2ZEdWNGRENEtQQzl6ZG1jKyIKfQ=="
-        );
+        _setTokenURI(newTokenId, finalTokenUri);
         console.log(
             "An NFT w/ ID %s has been minted to %s",
             newTokenId,
