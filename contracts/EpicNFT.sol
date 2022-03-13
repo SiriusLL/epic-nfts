@@ -31,7 +31,7 @@ contract EpicNFT is ERC721URIStorage {
 
         _setTokenURI(
             newTokenId,
-            "https://gateway.pinata.cloud/ipfs/QmaaPZVp9YsFLFrRUirW4W7p8osxWb8GbrG38hgawdLYhA"
+            "data:application/json;base64,ewogICJuYW1lIjogIlB1cnBsZU1vbmtleVN1bktpc3MiLAogICJkZXNjcmlwdGlvbiI6ICJXaXNkb20gb2YgYSBEcmFnb24gdG8gZmlsbCB5b3VyIEpvdXJuZXkgd2l0aCBsaWdodC4iLAogICJpbWFnZSI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSEJ5WlhObGNuWmxRWE53WldOMFVtRjBhVzg5SW5oTmFXNVpUV2x1SUcxbFpYUWlJSFpwWlhkQ2IzZzlJakFnTUNBek5UQWdNelV3SWo0S0lDQWdJRHh6ZEhsc1pUNHVZbUZ6WlNCN0lHWnBiR3c2SUhkb2FYUmxPeUJtYjI1MExXWmhiV2xzZVRvZ2MyVnlhV1k3SUdadmJuUXRjMmw2WlRvZ01UUndlRHNnZlR3dmMzUjViR1UrQ2lBZ0lDQThjbVZqZENCM2FXUjBhRDBpTVRBd0pTSWdhR1ZwWjJoMFBTSXhNREFsSWlCbWFXeHNQU0ppYkdGamF5SWdMejRLSUNBZ0lEeDBaWGgwSUhnOUlqVXdKU0lnZVQwaU5UQWxJaUJqYkdGemN6MGlZbUZ6WlNJZ1pHOXRhVzVoYm5RdFltRnpaV3hwYm1VOUltMXBaR1JzWlNJZ2RHVjRkQzFoYm1Ob2IzSTlJbTFwWkdSc1pTSStVSFZ5Y0d4bFRXOXVhMlY1VTNWdVMybHpjend2ZEdWNGRENEtQQzl6ZG1jKyIKfQ=="
         );
         console.log(
             "An NFT w/ ID %s has been minted to %s",
