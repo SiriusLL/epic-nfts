@@ -74,6 +74,8 @@ contract EpicNFT is ERC721URIStorage {
 
     event NewEpicNFTMinted(address sender, uint256 tokenId);
 
+    // event TotalSupplyLeft(uint256 maxSupply);
+
     // Pass the name of the NFTs token and symbol
     constructor() ERC721("StarNft", "STAR") {
         console.log("This is my NFT contract. WOOOT!!!");
@@ -137,8 +139,25 @@ contract EpicNFT is ERC721URIStorage {
         return uint256(keccak256(abi.encodePacked(input)));
     }
 
+    function getTokensRemaining()
+        public
+        view
+        returns (
+            uint256,
+            uint256,
+            string memory
+        )
+    {
+        if (_tokenIds.current() + 1 <= maxSupply) {
+            return (_tokenIds.current(), maxSupply, "");
+        } else {
+            return (_tokenIds.current(), maxSupply, "Sold Out!");
+        }
+    }
+
     // minting function
     function mintEpicNFT() public {
+        require(_tokenIds.current() + 1 <= maxSupply, "Sold Out!!");
         // Get current tokenId, starts from 0
         uint256 newTokenId = _tokenIds.current();
 
@@ -201,6 +220,10 @@ contract EpicNFT is ERC721URIStorage {
         );
 
         _tokenIds.increment();
+        // console.log("ts: ", totalSupply);
+        // totalSupply -= 1;
+        // console.log("ts: ", totalSupply);
         emit NewEpicNFTMinted(msg.sender, newTokenId);
+        // emit TotalSupplyLeft(totalSupply, maxSupply);
     }
 }

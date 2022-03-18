@@ -9,6 +9,28 @@ const main = async () => {
   // Wait for txn mined
   await txn.wait();
 
+  let total = await nftContract.getTokensRemaining();
+  // await total.wait();
+  console.log(total);
+
+  //Mint another NFT
+  txn = await nftContract.mintEpicNFT();
+  //wait for mined
+  await txn.wait();
+
+  total = await nftContract.getTokensRemaining();
+  await total.wait();
+  console.log(total);
+
+  //Mint another NFT
+  txn = await nftContract.mintEpicNFT();
+  //wait for mined
+  await txn.wait();
+
+  total = await nftContract.getTokensRemaining();
+  await total.wait();
+  console.log(total);
+
   //Mint another NFT
   txn = await nftContract.mintEpicNFT();
   //wait for mined
